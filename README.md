@@ -1,1 +1,5 @@
-# service-client
+
+```shell
+npm install
+npm start
+```
