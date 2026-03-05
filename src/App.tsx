@@ -61,7 +61,7 @@ function AuthenticatedApp({
   navigate,
   logout,
 }: any) {
-  const { orders, loading: ordersLoading, hasMore, loadOrders, refreshOrders, placeOrder } = useOrders(session);
+  const { orders, loading: ordersLoading, refreshOrders, placeOrder } = useOrders(session);
   const [toast, setToast] = useState<string | null>(null);
 
   useEffect(() => {
@@ -100,7 +100,7 @@ function AuthenticatedApp({
             path="/"
             element={
               <MenuPage
-                storeId={session.storeId}
+                session={session}
                 cart={cart}
                 onAdd={handleAdd}
                 onUpdateQty={updateQty}
@@ -125,8 +125,7 @@ function AuthenticatedApp({
               <OrdersPage
                 orders={orders}
                 loading={ordersLoading}
-                hasMore={hasMore}
-                onLoadMore={loadOrders}
+                onRefresh={refreshOrders}
               />
             }
           />

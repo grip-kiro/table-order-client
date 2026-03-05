@@ -1,75 +1,43 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
-import { Menu, CartItem, Category } from "../types";
-import { fetchMenus, fetchCategories } from "../api/client";
+import React, { useState, useEffect, useMemo } from "react";
+import { Menu, CartItem, Category, CategoryWithMenus, TableSession } from "../types";
+import { fetchMenusGrouped } from "../api/client";
 import MenuCard from "../components/MenuCard";
 import MenuDetailModal from "../components/MenuDetailModal";
 import "./MenuPage.css";
 
 interface Props {
-  storeId: number;
+  session: TableSession;
   cart: CartItem[];
   onAdd: (menu: Menu, qty: number) => void;
   onUpdateQty: (menuId: number, delta: number) => void;
 }
 
-export default function MenuPage({ storeId, cart, onAdd, onUpdateQty }: Props) {
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [category, setCategory] = useState("전체");
+export default function MenuPage({ session, cart, onAdd, onUpdateQty }: Props) {
+  const [groups, setGroups] = useState<CategoryWithMenus[]>([]);
+  const [categoryId, setCategoryId] = useState<number>(0); // 0 = 전체
   const [detailMenu, setDetailMenu] = useState<Menu | null>(null);
-  const [menus, setMenus] = useState<Menu[]>([]);
-  const [cursor, setCursor] = useState<number | null>(null);
-  const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(false);
-  const loaderRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    fetchCategories(storeId).then(setCategories).catch(() => {});
-  }, [storeId]);
-
-  const loadMore = useCallback(async () => {
-    if (loading || !hasMore) return;
     setLoading(true);
-    try {
-      const page = await fetchMenus(storeId, category, cursor);
-      setMenus((prev) => [...prev, ...page.items]);
-      setCursor(page.nextCursor !== null ? Number(page.nextCursor) : null);
-      setHasMore(page.nextCursor !== null);
-    } catch {
-      setHasMore(false);
-    } finally {
-      setLoading(false);
+    fetchMenusGrouped(session)
+      .then(setGroups)
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, [session]);
+
+  const categories: Category[] = useMemo(
+    () => groups.map((g) => ({ id: g.id, name: g.name, displayOrder: g.displayOrder })),
+    [groups]
+  );
+
+  const menus: Menu[] = useMemo(() => {
+    if (categoryId === 0) {
+      return groups.flatMap((g) => g.menus).sort((a, b) => a.displayOrder - b.displayOrder);
     }
-  }, [storeId, category, cursor, loading, hasMore]);
-
-  useEffect(() => {
-    setMenus([]);
-    setCursor(null);
-    setHasMore(true);
-  }, [category]);
-
-  useEffect(() => {
-    if (menus.length === 0 && hasMore && !loading) {
-      loadMore();
-    }
-  }, [menus.length, hasMore, loading, loadMore]);
-
-  useEffect(() => {
-    const el = loaderRef.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) loadMore();
-      },
-      { threshold: 0.1 }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [loadMore]);
-
-  const handleCategory = (c: string) => {
-    if (c === category) return;
-    setCategory(c);
-  };
+    const group = groups.find((g) => g.id === categoryId);
+    return group ? group.menus.sort((a, b) => a.displayOrder - b.displayOrder) : [];
+  }, [groups, categoryId]);
 
   const allCategories = [{ id: 0, name: "전체", displayOrder: 0 }, ...categories];
 
@@ -79,30 +47,32 @@ export default function MenuPage({ storeId, cart, onAdd, onUpdateQty }: Props) {
         {allCategories.map((c) => (
           <button
             key={c.id}
-            className={`cat-btn${category === c.name ? " active" : ""}`}
-            onClick={() => handleCategory(c.name)}
+            className={`cat-btn${categoryId === c.id ? " active" : ""}`}
+            onClick={() => setCategoryId(c.id)}
           >
             {c.name}
           </button>
         ))}
       </div>
 
-      <div className="menu-grid">
-        {menus.map((menu) => (
-          <MenuCard
-            key={menu.id}
-            menu={menu}
-            cartItem={cart.find((i) => i.menuId === menu.id)}
-            onAdd={onAdd}
-            onUpdateQty={onUpdateQty}
-            onDetail={setDetailMenu}
-          />
-        ))}
-      </div>
-
-      <div ref={loaderRef} className="scroll-loader">
-        {loading && <span className="loader-dot">불러오는 중...</span>}
-      </div>
+      {loading ? (
+        <div className="scroll-loader">
+          <span className="loader-dot">불러오는 중...</span>
+        </div>
+      ) : (
+        <div className="menu-grid">
+          {menus.map((menu) => (
+            <MenuCard
+              key={menu.id}
+              menu={menu}
+              cartItem={cart.find((i) => i.menuId === menu.id)}
+              onAdd={onAdd}
+              onUpdateQty={onUpdateQty}
+              onDetail={setDetailMenu}
+            />
+          ))}
+        </div>
+      )}
 
       <MenuDetailModal menu={detailMenu} onClose={() => setDetailMenu(null)} onAdd={onAdd} />
     </div>

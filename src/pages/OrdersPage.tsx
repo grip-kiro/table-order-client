@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React from "react";
 import { Order, ORDER_STATUS_LABEL, ORDER_STATUS_COLOR } from "../types";
 import { fmt, timeAgo, timeStr } from "../utils";
 import "./OrdersPage.css";
@@ -6,26 +6,10 @@ import "./OrdersPage.css";
 interface Props {
   orders: Order[];
   loading: boolean;
-  hasMore: boolean;
-  onLoadMore: () => void;
+  onRefresh: () => void;
 }
 
-export default function OrdersPage({ orders, loading, hasMore, onLoadMore }: Props) {
-  const loaderRef = useRef<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    const el = loaderRef.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) onLoadMore();
-      },
-      { threshold: 0.1 }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [onLoadMore]);
-
+export default function OrdersPage({ orders, loading, onRefresh }: Props) {
   return (
     <div className="orders-page">
       <h2 className="page-title">주문 내역</h2>
@@ -76,9 +60,11 @@ export default function OrdersPage({ orders, loading, hasMore, onLoadMore }: Pro
         </div>
       )}
 
-      <div ref={loaderRef} className="scroll-loader">
-        {loading && <span className="loader-dot">불러오는 중...</span>}
-      </div>
+      {loading && (
+        <div className="scroll-loader">
+          <span className="loader-dot">불러오는 중...</span>
+        </div>
+      )}
     </div>
   );
 }

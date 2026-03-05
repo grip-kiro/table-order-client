@@ -1,173 +1,130 @@
-.menu-card {
+.mc {
   background: #fff;
   border-radius: 16px;
   overflow: hidden;
-  box-shadow:
-    0 0 0 1px rgba(0, 0, 0, 0.04),
-    0 2px 8px rgba(0, 0, 0, 0.03);
   display: flex;
   flex-direction: column;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  transition: box-shadow 0.2s;
 }
+.mc:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.08); }
+.mc--sold { opacity: 0.5; pointer-events: auto; }
 
-.menu-card:hover {
-  transform: translateY(-3px);
-  box-shadow:
-    0 0 0 1px rgba(0, 0, 0, 0.04),
-    0 12px 40px rgba(0, 0, 0, 0.08);
-}
-
-.menu-card.sold-out {
-  opacity: 0.5;
-}
-
-.menu-img-area {
+/* 이미지 */
+.mc__img {
   position: relative;
-  text-align: center;
-  padding: 28px 16px 12px;
+  aspect-ratio: 1 / 1;
+  background: #f5f3f0;
   cursor: pointer;
-  background: #faf8f5;
-  min-height: 100px;
+  overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
 }
-
-.menu-img {
+.mc__img img {
   width: 100%;
-  height: 120px;
+  height: 100%;
   object-fit: cover;
-  border-radius: 8px;
 }
-
-.menu-placeholder {
-  font-size: 48px;
-}
-
-.sold-out-badge {
+.mc__ph { font-size: 32px; opacity: 0.25; }
+.mc__sold-overlay {
   position: absolute;
-  top: 12px;
-  right: 12px;
-  background: #222;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
   color: #fff;
-  font-size: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
   font-weight: 700;
-  padding: 4px 10px;
-  border-radius: 6px;
+  letter-spacing: 1px;
 }
 
-.menu-info {
-  padding: 0 20px 16px;
-  flex-grow: 1;
+/* 본문 */
+.mc__body {
+  padding: 10px 12px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+
+.mc__info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
   cursor: pointer;
 }
 
-.menu-name {
+.mc__name {
+  font-size: 13px;
   font-weight: 700;
-  font-size: 15px;
-  margin-bottom: 4px;
-  color: #222;
-  letter-spacing: -0.2px;
+  color: #1c1917;
+  line-height: 1.3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.menu-desc {
-  font-size: 12px;
-  color: #aaa;
-  line-height: 1.5;
-}
-
-.menu-category {
-  display: inline-block;
-  font-size: 10px;
-  color: #999;
-  font-weight: 600;
-  margin-top: 8px;
-  background: #f3f0eb;
-  padding: 3px 8px;
-  border-radius: 4px;
-  letter-spacing: 0.3px;
-}
-
-.menu-bottom {
-  padding: 14px 20px;
-  border-top: 1px solid #f3f0eb;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.menu-price {
+.mc__price {
+  font-size: 13px;
   font-weight: 800;
-  font-size: 16px;
-  color: #222;
-  letter-spacing: -0.3px;
+  color: #1c1917;
 }
 
-.add-row {
+/* 수량 + 담기 */
+.mc__actions {
   display: flex;
+  flex-direction: column;
   align-items: center;
   gap: 6px;
+  margin-top: auto;
 }
 
-.add-btn {
-  background: #222;
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  padding: 0 14px;
-  font-weight: 700;
-  cursor: pointer;
-  font-size: 12px;
-  min-width: 44px;
-  min-height: 44px;
-  transition: all 0.15s ease;
-  letter-spacing: 0.2px;
-}
-
-.add-btn:hover:not(:disabled) {
-  background: #000;
-}
-
-.add-btn:active:not(:disabled) {
-  transform: scale(0.95);
-}
-
-.add-btn:disabled {
-  background: #ccc;
-  cursor: not-allowed;
-}
-
-.qty-row {
+.mc__qty {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 10px;
 }
 
-.qty-btn {
-  width: 44px;
-  height: 44px;
-  border-radius: 8px;
-  border: 1px solid #e4dfd8;
-  background: #fff;
+.mc__qty button {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: none;
+  background: #f5f3f0;
   cursor: pointer;
-  font-size: 16px;
-  font-weight: 600;
+  font-size: 14px;
+  font-weight: 500;
+  color: #78716c;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #555;
-  transition: all 0.12s ease;
+  transition: all 0.15s;
 }
+.mc__qty button:hover { background: #ebe8e4; color: #1c1917; }
 
-.qty-btn:hover {
-  border-color: #222;
-  color: #222;
-}
-
-.qty-num {
-  font-weight: 800;
-  font-size: 14px;
-  min-width: 20px;
+.mc__qty span {
+  font-size: 13px;
+  font-weight: 700;
+  color: #1c1917;
+  min-width: 16px;
   text-align: center;
-  color: #222;
 }
+
+.mc__btn-add {
+  width: 100%;
+  height: 30px;
+  border: none;
+  border-radius: 8px;
+  background: #b45309;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s;
+  letter-spacing: 0.3px;
+}
+.mc__btn-add:hover:not(:disabled) { background: #92400e; }
+.mc__btn-add:active:not(:disabled) { transform: scale(0.97); }
+.mc__btn-add:disabled { background: #d6d3d1; cursor: not-allowed; color: #fff; }

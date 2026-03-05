@@ -1,4 +1,4 @@
-import { Menu, Order, Category, TableCredential, TableSession, CursorPage, TokenPair } from "../types";
+import { Menu, Order, CategoryWithMenus, TableCredential, TableSession, TokenPair } from "../types";
 import { MOCK_MENUS, MOCK_ORDERS, MOCK_CATEGORIES } from "../data/mock";
 
 const API_BASE = process.env.REACT_APP_API_BASE || "";
@@ -28,7 +28,6 @@ async function authFetch(url: string, options: RequestInit, session: TableSessio
   const res = await fetch(url, { ...options, headers });
 
   if (res.status === 401 && API_BASE) {
-    // 토큰 갱신 시도 (중복 방지)
     if (!refreshPromise) {
       refreshPromise = refreshToken(session.refreshToken).finally(() => { refreshPromise = null; });
     }
@@ -62,47 +61,40 @@ export async function loginTable(credential: TableCredential): Promise<TableSess
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(credential),
   });
-  if (!res.ok) throw new Error("인증에 실패했습니다");
-  return res.json();
-}
-
-// ── 카테고리 ──
-
-export async function fetchCategories(storeId: number): Promise<Category[]> {
-  if (!API_BASE) {
-    return MOCK_CATEGORIES;
+  if (!res.ok) {
+    const err = await res.json().catch(() => null);
+    throw new Error(err?.message || "인증에 실패했습니다");
   }
-  const res = await fetch(`${API_BASE}/api/stores/${storeId}/menus`);
-  if (!res.ok) throw new Error("카테고리를 불러올 수 없습니다");
   return res.json();
 }
 
-// ── 메뉴 ──
+// ── 메뉴 (카테고리별 그룹) ──
 
-const PAGE_SIZE = 4;
-
-export async function fetchMenus(
-  storeId: number,
-  category: string,
-  cursor: number | null
-): Promise<CursorPage<Menu>> {
+export async function fetchMenusGrouped(
+  session: TableSession
+): Promise<CategoryWithMenus[]> {
   if (!API_BASE) {
     await new Promise((r) => setTimeout(r, 300));
-    const all = category === "전체"
-      ? MOCK_MENUS
-      : MOCK_MENUS.filter((m) => m.categories.some((c) => c.name === category));
-    const sorted = [...all].sort((a, b) => a.displayOrder - b.displayOrder);
-    const startIdx = cursor !== null ? sorted.findIndex((m) => m.id === cursor) + 1 : 0;
-    const items = sorted.slice(startIdx, startIdx + PAGE_SIZE);
-    const nextCursor = startIdx + PAGE_SIZE < sorted.length ? String(items[items.length - 1]?.id ?? "") : null;
-    return { items, nextCursor };
+    // mock: 카테고리별로 그룹핑
+    const catMap = new Map<string, Menu[]>();
+    for (const menu of MOCK_MENUS) {
+      for (const cat of menu.categories) {
+        if (!catMap.has(cat.name)) catMap.set(cat.name, []);
+        catMap.get(cat.name)!.push(menu);
+      }
+    }
+    const result: CategoryWithMenus[] = MOCK_CATEGORIES.map((c) => ({
+      ...c,
+      menus: (catMap.get(c.name) || []).sort((a, b) => a.displayOrder - b.displayOrder),
+    }));
+    return result;
   }
 
-  const params = new URLSearchParams({ size: String(PAGE_SIZE) });
-  if (category !== "전체") params.set("category", category);
-  if (cursor !== null) params.set("cursor", String(cursor));
-
-  const res = await fetch(`${API_BASE}/api/stores/${storeId}/menus?${params}`);
+  const res = await authFetch(
+    `${API_BASE}/api/stores/${session.storeId}/menus`,
+    {},
+    session
+  );
   if (!res.ok) throw new Error("메뉴를 불러올 수 없습니다");
   return res.json();
 }
@@ -122,7 +114,6 @@ export async function createOrder(
   if (!API_BASE) {
     await new Promise((r) => setTimeout(r, 200));
     mockOrderCounter++;
-    // mock: 클라이언트에서 메뉴 정보 조회하여 주문 구성
     const items = req.items.map((item, idx) => {
       const menu = MOCK_MENUS.find((m) => m.id === item.menuId);
       if (menu?.isSoldOut) throw new Error("품절된 메뉴가 포함되어 있습니다");
@@ -137,14 +128,10 @@ export async function createOrder(
     });
     const order: Order = {
       id: mockOrderCounter,
-      storeId: session.storeId,
-      tableId: session.tableId,
-      sessionId: session.sessionId,
       totalAmount: items.reduce((s, i) => s + i.subtotal, 0),
       status: "PENDING",
       items,
       createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
     };
     MOCK_ORDERS.unshift(order);
     return order;
@@ -163,24 +150,14 @@ export async function createOrder(
   return res.json();
 }
 
-export async function fetchOrders(
-  session: TableSession,
-  cursor: string | null
-): Promise<CursorPage<Order>> {
+export async function fetchOrders(session: TableSession): Promise<Order[]> {
   if (!API_BASE) {
     await new Promise((r) => setTimeout(r, 200));
-    const sessionOrders = MOCK_ORDERS.filter((o) => o.sessionId === session.sessionId);
-    const startIdx = cursor ? sessionOrders.findIndex((o) => String(o.id) === cursor) + 1 : 0;
-    const items = sessionOrders.slice(startIdx, startIdx + 10);
-    const nextCursor = startIdx + 10 < sessionOrders.length ? String(items[items.length - 1]?.id ?? "") : null;
-    return { items, nextCursor };
+    return MOCK_ORDERS;
   }
 
-  const params = new URLSearchParams({ size: "10" });
-  if (cursor) params.set("cursor", cursor);
-
   const res = await authFetch(
-    `${API_BASE}/api/tables/${session.tableId}/orders?${params}`,
+    `${API_BASE}/api/tables/${session.tableId}/orders`,
     {},
     session
   );

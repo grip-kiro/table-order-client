@@ -20,34 +20,34 @@ export default function MenuCard({ menu, cartItem, onAdd, onUpdateQty, onDetail 
   };
 
   return (
-    <div className={`menu-card${menu.isSoldOut ? " sold-out" : ""}`}>
-      <div className="menu-img-area" onClick={() => onDetail(menu)}>
+    <div className={`mc${menu.isSoldOut ? " mc--sold" : ""}`}>
+      <div className="mc__img" onClick={() => onDetail(menu)}>
         {menu.imageUrl ? (
-          <img className="menu-img" src={menu.imageUrl} alt={menu.name} />
+          <img src={menu.imageUrl} alt={menu.name} />
         ) : (
-          <span className="menu-placeholder">🍽️</span>
+          <span className="mc__ph">🍽️</span>
         )}
-        {menu.isSoldOut && <div className="sold-out-badge">품절</div>}
+        {menu.isSoldOut && <div className="mc__sold-overlay">품절</div>}
       </div>
-      <div className="menu-info" onClick={() => onDetail(menu)}>
-        <div className="menu-name">{menu.name}</div>
-        <div className="menu-desc">{menu.description}</div>
-        {menu.categories.length > 0 && (
-          <span className="menu-category">{menu.categories[0].name}</span>
-        )}
-      </div>
-      <div className="menu-bottom">
-        <div className="menu-price">{fmt(menu.price * qty)}</div>
+
+      <div className="mc__body">
+        <div className="mc__info" onClick={() => onDetail(menu)}>
+          <span className="mc__name">{menu.name}</span>
+          <span className="mc__price">{fmt(menu.price * qty)}</span>
+        </div>
+
         {menu.isSoldOut ? (
-          <button className="add-btn" disabled>품절</button>
+          <div className="mc__actions">
+            <button className="mc__btn-add" disabled>품절</button>
+          </div>
         ) : (
-          <div className="add-row">
-            <div className="qty-row">
-              <button className="qty-btn" onClick={() => setQty((q) => Math.max(1, q - 1))}>−</button>
-              <span className="qty-num">{qty}</span>
-              <button className="qty-btn" onClick={() => setQty((q) => q + 1)}>+</button>
+          <div className="mc__actions">
+            <div className="mc__qty">
+              <button onClick={() => setQty(q => Math.max(1, q - 1))}>−</button>
+              <span>{qty}</span>
+              <button onClick={() => setQty(q => q + 1)}>+</button>
             </div>
-            <button className="add-btn" onClick={handleAdd}>담기</button>
+            <button className="mc__btn-add" onClick={handleAdd}>담기</button>
           </div>
         )}
       </div>

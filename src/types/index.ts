@@ -15,6 +15,13 @@ export interface Menu {
   categories: { id: number; name: string }[];
 }
 
+export interface CategoryWithMenus {
+  id: number;
+  name: string;
+  displayOrder: number;
+  menus: Menu[];
+}
+
 export interface CartItem {
   menuId: number;
   name: string;
@@ -48,14 +55,10 @@ export const ORDER_STATUS_COLOR: Record<OrderStatus, string> = {
 
 export interface Order {
   id: number;
-  storeId: number;
-  tableId: number;
-  sessionId: string;
   totalAmount: number;
   status: OrderStatus;
   items: OrderItem[];
   createdAt: string;
-  updatedAt: string;
 }
 
 export interface TableCredential {
@@ -86,9 +89,4 @@ export interface ApiError {
   message: string;
   timestamp: string;
   details?: Record<string, any>;
-}
-
-export interface CursorPage<T> {
-  items: T[];
-  nextCursor: string | null;
 }
