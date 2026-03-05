@@ -1,0 +1,23 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  background: #faf7f2;
+  color: #1a1a1a;
+  -webkit-font-smoothing: antialiased;
+}
+
+.app {
+  min-height: 100vh;
+  background: #faf7f2;
+}
+
+.main-content {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 20px 16px;
+}

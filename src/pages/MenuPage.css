@@ -1,0 +1,42 @@
+.menu-page {
+  padding: 20px 0 80px;
+}
+
+.category-bar {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 12px;
+  margin-bottom: 20px;
+  scrollbar-width: none;
+}
+
+.category-bar::-webkit-scrollbar {
+  display: none;
+}
+
+.cat-btn {
+  padding: 8px 18px;
+  border-radius: 999px;
+  border: 1.5px solid #e0d8d0;
+  background: #fff;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+  color: #555;
+  transition: all 0.15s;
+}
+
+.cat-btn.active,
+.cat-btn:hover {
+  background: #c2440e;
+  border-color: #c2440e;
+  color: #fff;
+}
+
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 16px;
+}
