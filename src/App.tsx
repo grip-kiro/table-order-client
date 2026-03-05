@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from "react";
 import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
 import Header from "./components/Header";
+import LoginPage from "./pages/LoginPage";
 import MenuPage from "./pages/MenuPage";
 import CartPage from "./pages/CartPage";
 import OrdersPage from "./pages/OrdersPage";
@@ -11,9 +12,21 @@ import "./App.css";
 
 function AppInner() {
   const navigate = useNavigate();
+  const [user, setUser] = useState<string | null>(() => sessionStorage.getItem("user_phone"));
   const { cart, add, updateQty, clear, total, count } = useCart();
   const { sessionOrders, placeOrder } = useOrders();
   const [successOrderId, setSuccessOrderId] = useState<string | null>(null);
+
+  const handleLogin = useCallback((phone: string) => {
+    sessionStorage.setItem("user_phone", phone);
+    setUser(phone);
+  }, []);
+
+  const handleLogout = useCallback(() => {
+    sessionStorage.removeItem("user_phone");
+    setUser(null);
+    clear();
+  }, [clear]);
 
   const handleOrder = useCallback(() => {
     if (cart.length === 0) return;
@@ -26,9 +39,13 @@ function AppInner() {
     }, 4000);
   }, [cart, total, placeOrder, clear, navigate]);
 
+  if (!user) {
+    return <LoginPage onLogin={handleLogin} />;
+  }
+
   return (
     <div className="app">
-      <Header cartCount={count} />
+      <Header cartCount={count} onLogout={handleLogout} />
       <OrderSuccessOverlay orderId={successOrderId} />
       <main className="main-content">
         <Routes>

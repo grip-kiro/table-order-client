@@ -1,12 +1,12 @@
 .menu-page {
-  padding: 20px 0 80px;
+  padding: 4px 0 80px;
 }
 
 .category-bar {
   display: flex;
   gap: 8px;
   overflow-x: auto;
-  padding-bottom: 12px;
+  padding-bottom: 16px;
   margin-bottom: 20px;
   scrollbar-width: none;
 }
@@ -16,23 +16,29 @@
 }
 
 .cat-btn {
-  padding: 8px 18px;
-  border-radius: 999px;
-  border: 1.5px solid #e0d8d0;
-  background: #fff;
+  padding: 10px 20px;
+  border-radius: 12px;
+  border: none;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(8px);
   cursor: pointer;
   font-size: 14px;
   font-weight: 600;
   white-space: nowrap;
-  color: #555;
-  transition: all 0.15s;
+  color: #777;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
 }
 
-.cat-btn.active,
 .cat-btn:hover {
+  background: rgba(255, 255, 255, 0.95);
+  color: #c2440e;
+}
+
+.cat-btn.active {
   background: #c2440e;
-  border-color: #c2440e;
   color: #fff;
+  box-shadow: 0 3px 12px rgba(194, 68, 14, 0.3);
 }
 
 .menu-grid {
@@ -43,11 +49,12 @@
 
 .scroll-loader {
   text-align: center;
-  padding: 20px 0;
+  padding: 24px 0;
   min-height: 40px;
 }
 
 .loader-dot {
-  color: #999;
-  font-size: 14px;
+  color: #bbb;
+  font-size: 13px;
+  font-weight: 500;
 }

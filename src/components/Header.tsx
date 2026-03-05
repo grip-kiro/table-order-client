@@ -5,9 +5,10 @@ import "./Header.css";
 
 interface Props {
   cartCount: number;
+  onLogout: () => void;
 }
 
-export default function Header({ cartCount }: Props) {
+export default function Header({ cartCount, onLogout }: Props) {
   return (
     <header className="header">
       <div className="header-left">
@@ -28,6 +29,9 @@ export default function Header({ cartCount }: Props) {
         <NavLink to="/orders" className={({ isActive }) => isActive ? "nav-btn active" : "nav-btn"}>
           주문내역
         </NavLink>
+        <button className="nav-btn logout-btn" onClick={onLogout}>
+          나가기
+        </button>
       </nav>
     </header>
   );

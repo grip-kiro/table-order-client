@@ -1,5 +1,5 @@
 .orders-page {
-  padding: 20px 0 80px;
+  padding: 4px 0 80px;
 }
 
 .page-title {
@@ -7,21 +7,22 @@
   font-size: 22px;
   margin-bottom: 20px;
   color: #1a1a1a;
+  letter-spacing: -0.3px;
 }
 
 .empty-state {
   text-align: center;
-  padding: 60px 20px;
-  color: #aaa;
+  padding: 72px 20px;
+  color: #bbb;
 }
 
 .empty-icon {
   font-size: 56px;
+  margin-bottom: 4px;
 }
 
 .empty-text {
-  font-size: 16px;
-  margin-top: 12px;
+  font-size: 15px;
   font-weight: 600;
 }
 
@@ -32,24 +33,32 @@
 }
 
 .order-card {
-  background: #fff;
-  border-radius: 16px;
-  padding: 18px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
-  border: 1px solid #ece8e0;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  border-radius: 18px;
+  padding: 20px;
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.04),
+    0 4px 16px rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  transition: all 0.2s ease;
+}
+
+.order-card:hover {
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
 }
 
 .order-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 14px;
+  margin-bottom: 16px;
 }
 
 .order-meta {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   flex-wrap: wrap;
 }
 
@@ -72,8 +81,8 @@
 .status-badge {
   font-size: 12px;
   font-weight: 700;
-  padding: 4px 12px;
-  border-radius: 999px;
+  padding: 5px 14px;
+  border-radius: 8px;
   flex-shrink: 0;
 }
 
@@ -81,14 +90,14 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
-  margin-bottom: 14px;
+  margin-bottom: 16px;
 }
 
 .order-item-row {
   display: flex;
   gap: 8px;
   font-size: 14px;
-  color: #444;
+  color: #555;
   align-items: center;
 }
 
@@ -97,7 +106,7 @@
 }
 
 .order-item-qty {
-  color: #aaa;
+  color: #bbb;
 }
 
 .order-item-amt {
@@ -108,15 +117,15 @@
 .order-footer-row {
   display: flex;
   justify-content: space-between;
-  padding-top: 12px;
-  border-top: 1px solid #f0ebe5;
+  padding-top: 14px;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
   font-size: 14px;
   font-weight: 600;
-  color: #666;
+  color: #777;
 }
 
 .order-total {
   font-weight: 800;
-  font-size: 16px;
+  font-size: 17px;
   color: #c2440e;
 }

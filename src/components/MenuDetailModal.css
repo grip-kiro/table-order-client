@@ -2,12 +2,13 @@
   position: fixed;
   inset: 0;
   z-index: 500;
-  background: rgba(0, 0, 0, 0.45);
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 20px;
-  animation: fadeIn 0.15s ease;
+  animation: fadeIn 0.2s ease;
 }
 
 @keyframes fadeIn {
@@ -18,85 +19,94 @@
 .modal-box {
   background: #fff;
   border-radius: 24px;
-  padding: 36px 28px;
-  max-width: 340px;
+  padding: 40px 32px 32px;
+  max-width: 360px;
   width: 100%;
   text-align: center;
-  animation: slideUp 0.2s ease;
+  animation: modalIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
 }
 
-@keyframes slideUp {
-  from { transform: translateY(20px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+@keyframes modalIn {
+  from { transform: translateY(24px) scale(0.96); opacity: 0; }
+  to { transform: translateY(0) scale(1); opacity: 1; }
 }
 
 .modal-emoji {
-  font-size: 72px;
-  margin-bottom: 12px;
+  font-size: 68px;
+  margin-bottom: 16px;
 }
 
 .modal-name {
   font-size: 22px;
-  font-weight: 900;
+  font-weight: 800;
   margin-bottom: 8px;
   color: #1a1a1a;
+  letter-spacing: -0.3px;
 }
 
 .modal-desc {
   font-size: 14px;
-  color: #666;
-  margin-bottom: 12px;
+  color: #888;
+  margin-bottom: 16px;
   line-height: 1.6;
 }
 
 .modal-price {
-  font-size: 24px;
-  font-weight: 900;
+  font-size: 26px;
+  font-weight: 800;
   color: #c2440e;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
 }
 
 .modal-category {
   display: inline-block;
   font-size: 12px;
   color: #c2440e;
-  background: #fff0eb;
-  padding: 3px 10px;
-  border-radius: 999px;
+  background: rgba(194, 68, 14, 0.08);
+  padding: 4px 12px;
+  border-radius: 8px;
   font-weight: 600;
 }
 
 .modal-actions {
   display: flex;
   gap: 10px;
-  margin-top: 20px;
+  margin-top: 24px;
 }
 
 .modal-close-btn {
   flex: 1;
-  padding: 13px;
-  border-radius: 12px;
-  border: 1.5px solid #e0d8d0;
+  padding: 14px;
+  border-radius: 14px;
+  border: 1.5px solid #e8e0d8;
   background: #fff;
   font-weight: 700;
   cursor: pointer;
   font-size: 15px;
-  color: #666;
+  color: #777;
+  transition: all 0.15s ease;
+}
+
+.modal-close-btn:hover {
+  background: #f8f4f0;
 }
 
 .modal-add-btn {
   flex: 2;
-  padding: 13px;
-  border-radius: 12px;
+  padding: 14px;
+  border-radius: 14px;
   border: none;
-  background: #c2440e;
+  background: linear-gradient(135deg, #d14e14 0%, #c2440e 100%);
   color: #fff;
   font-weight: 800;
   cursor: pointer;
   font-size: 15px;
-  transition: background 0.15s;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 14px rgba(194, 68, 14, 0.3);
 }
 
 .modal-add-btn:hover {
-  background: #a33a0c;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(194, 68, 14, 0.4);
 }

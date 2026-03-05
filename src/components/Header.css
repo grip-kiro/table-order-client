@@ -2,36 +2,45 @@
   position: sticky;
   top: 0;
   z-index: 100;
-  background: #ffffff;
-  border-bottom: 2px solid #e8ddd0;
-  padding: 12px 20px;
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  padding: 14px 24px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
 }
 
 .header-left {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
 }
 
 .header-logo {
-  font-size: 32px;
+  font-size: 28px;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #fff5ef 0%, #ffe8db 100%);
+  border-radius: 12px;
 }
 
 .header-store {
   font-weight: 800;
-  font-size: 18px;
+  font-size: 17px;
   color: #c2440e;
-  letter-spacing: -0.5px;
+  letter-spacing: -0.3px;
 }
 
 .header-table {
   font-size: 12px;
-  color: #888;
+  color: #999;
   font-weight: 500;
+  margin-top: 1px;
 }
 
 .header-nav {
@@ -42,28 +51,32 @@
 .nav-btn {
   position: relative;
   padding: 8px 16px;
-  border-radius: 999px;
-  border: 1.5px solid #e0d8d0;
-  background: transparent;
+  border-radius: 10px;
+  border: 1.5px solid transparent;
+  background: rgba(0, 0, 0, 0.04);
   cursor: pointer;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
-  color: #666;
+  color: #777;
   text-decoration: none;
-  transition: all 0.15s;
+  transition: all 0.2s ease;
 }
 
-.nav-btn.active,
 .nav-btn:hover {
+  background: rgba(194, 68, 14, 0.08);
+  color: #c2440e;
+}
+
+.nav-btn.active {
   background: #c2440e;
-  border-color: #c2440e;
   color: #fff;
+  box-shadow: 0 2px 8px rgba(194, 68, 14, 0.3);
 }
 
 .cart-badge {
   position: absolute;
-  top: -6px;
-  right: -6px;
+  top: -5px;
+  right: -5px;
   background: #ef4444;
   color: #fff;
   border-radius: 999px;
@@ -74,4 +87,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  box-shadow: 0 2px 6px rgba(239, 68, 68, 0.4);
+}
+
+.logout-btn {
+  color: #aaa;
+}
+
+.logout-btn:hover {
+  background: rgba(0, 0, 0, 0.06);
+  color: #666;
 }

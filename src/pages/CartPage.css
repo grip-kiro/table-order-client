@@ -1,7 +1,7 @@
 .cart-page {
   max-width: 600px;
   margin: 0 auto;
-  padding: 20px 0 80px;
+  padding: 4px 0 80px;
 }
 
 .page-title {
@@ -9,52 +9,66 @@
   font-size: 22px;
   margin-bottom: 20px;
   color: #1a1a1a;
+  letter-spacing: -0.3px;
 }
 
 .empty-state {
   text-align: center;
-  padding: 60px 20px;
-  color: #aaa;
+  padding: 72px 20px;
+  color: #bbb;
 }
 
 .empty-icon {
   font-size: 56px;
+  margin-bottom: 4px;
 }
 
 .empty-text {
-  font-size: 16px;
-  margin-top: 12px;
+  font-size: 15px;
   font-weight: 600;
 }
 
 .go-menu-btn {
-  margin-top: 20px;
-  background: #c2440e;
+  margin-top: 24px;
+  background: linear-gradient(135deg, #d14e14 0%, #c2440e 100%);
   color: #fff;
   border: none;
-  border-radius: 999px;
-  padding: 12px 28px;
+  border-radius: 12px;
+  padding: 14px 32px;
   font-weight: 700;
   cursor: pointer;
   font-size: 15px;
+  box-shadow: 0 4px 14px rgba(194, 68, 14, 0.25);
+  transition: all 0.2s ease;
+}
+
+.go-menu-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(194, 68, 14, 0.35);
 }
 
 .cart-list {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
   margin-bottom: 20px;
 }
 
 .cart-item {
-  background: #fff;
-  border-radius: 14px;
-  padding: 16px;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  border-radius: 16px;
+  padding: 16px 18px;
   display: flex;
   align-items: center;
-  gap: 12px;
-  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.05);
-  border: 1px solid #ece8e0;
+  gap: 14px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  transition: all 0.2s ease;
+}
+
+.cart-item:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
 }
 
 .cart-emoji {
@@ -74,39 +88,40 @@
 
 .cart-item-price {
   font-size: 13px;
-  color: #888;
+  color: #999;
   margin-top: 2px;
 }
 
 .qty-row {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
 }
 
 .qty-btn {
-  width: 32px;
-  height: 32px;
-  border-radius: 999px;
-  border: 1.5px solid #e0d8d0;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  border: 1.5px solid #e8e0d8;
   background: #fff;
   cursor: pointer;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 700;
   display: flex;
   align-items: center;
   justify-content: center;
   color: #c2440e;
-  transition: background 0.12s;
+  transition: all 0.15s ease;
 }
 
 .qty-btn:hover {
-  background: #fff0eb;
+  background: rgba(194, 68, 14, 0.06);
+  border-color: #c2440e;
 }
 
 .qty-num {
   font-weight: 800;
-  font-size: 16px;
+  font-size: 15px;
   min-width: 24px;
   text-align: center;
   color: #1a1a1a;
@@ -122,26 +137,29 @@
 }
 
 .cart-footer {
-  background: #fff;
-  border-radius: 16px;
-  padding: 20px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
-  border: 1px solid #ece8e0;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(16px);
+  border-radius: 20px;
+  padding: 22px;
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.04),
+    0 8px 30px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.5);
 }
 
 .total-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 16px;
-  font-size: 16px;
+  margin-bottom: 18px;
+  font-size: 15px;
   font-weight: 600;
-  color: #444;
+  color: #555;
 }
 
 .total-amt {
-  font-size: 22px;
-  font-weight: 900;
+  font-size: 24px;
+  font-weight: 800;
   color: #c2440e;
 }
 
@@ -153,33 +171,35 @@
 .clear-btn {
   flex: 1;
   background: #fff;
-  border: 1.5px solid #e0d8d0;
-  border-radius: 12px;
+  border: 1.5px solid #e8e0d8;
+  border-radius: 14px;
   padding: 14px;
   font-weight: 700;
   cursor: pointer;
   font-size: 15px;
-  color: #666;
-  transition: background 0.15s;
+  color: #777;
+  transition: all 0.15s ease;
 }
 
 .clear-btn:hover {
-  background: #f5f0ec;
+  background: #f8f4f0;
 }
 
 .order-btn {
   flex: 2;
-  background: #c2440e;
+  background: linear-gradient(135deg, #d14e14 0%, #c2440e 100%);
   color: #fff;
   border: none;
-  border-radius: 12px;
+  border-radius: 14px;
   padding: 14px;
   font-weight: 800;
   cursor: pointer;
   font-size: 16px;
-  transition: background 0.15s;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 14px rgba(194, 68, 14, 0.3);
 }
 
 .order-btn:hover {
-  background: #a33a0c;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(194, 68, 14, 0.4);
 }
