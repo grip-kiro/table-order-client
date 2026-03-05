@@ -1,27 +1,79 @@
-import { Menu, Order, OrderStatus, TableCredential, TableSession, CursorPage, CartItem } from "../types";
-import { MOCK_MENUS, MOCK_ORDERS } from "../data/mock";
+import { Menu, Order, Category, TableCredential, TableSession, CursorPage, TokenPair } from "../types";
+import { MOCK_MENUS, MOCK_ORDERS, MOCK_CATEGORIES } from "../data/mock";
 
 const API_BASE = process.env.REACT_APP_API_BASE || "";
+
+// ── 토큰 갱신 ──
+
+let refreshPromise: Promise<TokenPair> | null = null;
+
+export async function refreshToken(token: string): Promise<TokenPair> {
+  if (!API_BASE) {
+    return { accessToken: `mock-access-${Date.now()}`, refreshToken: `mock-refresh-${Date.now()}`, expiresIn: 3600 };
+  }
+  const res = await fetch(`${API_BASE}/api/auth/refresh`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ refreshToken: token }),
+  });
+  if (!res.ok) throw new Error("토큰 갱신 실패");
+  return res.json();
+}
+
+async function authFetch(url: string, options: RequestInit, session: TableSession): Promise<Response> {
+  const headers: Record<string, string> = {
+    ...((options.headers as Record<string, string>) || {}),
+    Authorization: `Bearer ${session.accessToken}`,
+  };
+  const res = await fetch(url, { ...options, headers });
+
+  if (res.status === 401 && API_BASE) {
+    // 토큰 갱신 시도 (중복 방지)
+    if (!refreshPromise) {
+      refreshPromise = refreshToken(session.refreshToken).finally(() => { refreshPromise = null; });
+    }
+    const newTokens = await refreshPromise;
+    session.accessToken = newTokens.accessToken;
+    session.refreshToken = newTokens.refreshToken;
+    sessionStorage.setItem("table-order-session", JSON.stringify(session));
+    headers.Authorization = `Bearer ${newTokens.accessToken}`;
+    return fetch(url, { ...options, headers });
+  }
+  return res;
+}
 
 // ── 인증 ──
 
 export async function loginTable(credential: TableCredential): Promise<TableSession> {
   if (!API_BASE) {
-    // mock: 아무 값이든 통과
     return {
       storeId: credential.storeId,
-      tableNo: credential.tableNo,
+      tableId: credential.tableNumber,
+      tableNumber: credential.tableNumber,
       sessionId: `sess-${Date.now()}`,
-      token: `mock-token-${Date.now()}`,
+      accessToken: `mock-access-${Date.now()}`,
+      refreshToken: `mock-refresh-${Date.now()}`,
+      expiresIn: 3600,
     };
   }
 
-  const res = await fetch(`${API_BASE}/api/tables/login`, {
+  const res = await fetch(`${API_BASE}/api/auth/table/login`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(credential),
   });
-  if (!res.ok) throw new Error("로그인에 실패했습니다");
+  if (!res.ok) throw new Error("인증에 실패했습니다");
+  return res.json();
+}
+
+// ── 카테고리 ──
+
+export async function fetchCategories(storeId: number): Promise<Category[]> {
+  if (!API_BASE) {
+    return MOCK_CATEGORIES;
+  }
+  const res = await fetch(`${API_BASE}/api/stores/${storeId}/menus`);
+  if (!res.ok) throw new Error("카테고리를 불러올 수 없습니다");
   return res.json();
 }
 
@@ -30,17 +82,19 @@ export async function loginTable(credential: TableCredential): Promise<TableSess
 const PAGE_SIZE = 4;
 
 export async function fetchMenus(
-  storeId: string,
+  storeId: number,
   category: string,
   cursor: number | null
 ): Promise<CursorPage<Menu>> {
   if (!API_BASE) {
-    // mock
     await new Promise((r) => setTimeout(r, 300));
-    const all = category === "전체" ? MOCK_MENUS : MOCK_MENUS.filter((m) => m.category === category);
-    const startIdx = cursor !== null ? all.findIndex((m) => m.id === cursor) + 1 : 0;
-    const items = all.slice(startIdx, startIdx + PAGE_SIZE);
-    const nextCursor = startIdx + PAGE_SIZE < all.length ? String(items[items.length - 1]?.id ?? "") : null;
+    const all = category === "전체"
+      ? MOCK_MENUS
+      : MOCK_MENUS.filter((m) => m.categories.some((c) => c.name === category));
+    const sorted = [...all].sort((a, b) => a.displayOrder - b.displayOrder);
+    const startIdx = cursor !== null ? sorted.findIndex((m) => m.id === cursor) + 1 : 0;
+    const items = sorted.slice(startIdx, startIdx + PAGE_SIZE);
+    const nextCursor = startIdx + PAGE_SIZE < sorted.length ? String(items[items.length - 1]?.id ?? "") : null;
     return { items, nextCursor };
   }
 
@@ -53,84 +107,83 @@ export async function fetchMenus(
   return res.json();
 }
 
-// ── 카테고리 ──
-
-export async function fetchCategories(storeId: string): Promise<string[]> {
-  if (!API_BASE) {
-    return ["전체", "메인", "사이드", "음료", "디저트"];
-  }
-
-  const res = await fetch(`${API_BASE}/api/stores/${storeId}/categories`);
-  if (!res.ok) throw new Error("카테고리를 불러올 수 없습니다");
-  const categories: string[] = await res.json();
-  return ["전체", ...categories];
-}
-
 // ── 주문 ──
 
 export interface CreateOrderRequest {
-  storeId: string;
-  tableNo: number;
-  sessionId: string;
-  items: { menuId: number; name: string; qty: number; price: number }[];
-  total: number;
+  items: { menuId: number; quantity: number }[];
 }
 
-let mockOrderCounter = MOCK_ORDERS.length;
+let mockOrderCounter = 0;
 
 export async function createOrder(
-  token: string,
+  session: TableSession,
   req: CreateOrderRequest
 ): Promise<Order> {
   if (!API_BASE) {
     await new Promise((r) => setTimeout(r, 200));
     mockOrderCounter++;
+    // mock: 클라이언트에서 메뉴 정보 조회하여 주문 구성
+    const items = req.items.map((item, idx) => {
+      const menu = MOCK_MENUS.find((m) => m.id === item.menuId);
+      if (menu?.isSoldOut) throw new Error("품절된 메뉴가 포함되어 있습니다");
+      return {
+        id: idx + 1,
+        menuId: item.menuId,
+        menuName: menu?.name || "",
+        quantity: item.quantity,
+        unitPrice: menu?.price || 0,
+        subtotal: (menu?.price || 0) * item.quantity,
+      };
+    });
     const order: Order = {
-      id: `ORD-${String(mockOrderCounter).padStart(3, "0")}`,
-      createdAt: new Date(),
-      sessionId: req.sessionId,
-      storeId: req.storeId,
-      tableNo: req.tableNo,
-      items: req.items.map((i) => ({ name: i.name, qty: i.qty, price: i.price })),
-      total: req.total,
-      status: "대기중",
+      id: mockOrderCounter,
+      storeId: session.storeId,
+      tableId: session.tableId,
+      sessionId: session.sessionId,
+      totalAmount: items.reduce((s, i) => s + i.subtotal, 0),
+      status: "PENDING",
+      items,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
     };
     MOCK_ORDERS.unshift(order);
     return order;
   }
 
-  const res = await fetch(`${API_BASE}/api/orders`, {
+  const res = await authFetch(`${API_BASE}/api/orders`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(req),
-  });
-  if (!res.ok) throw new Error("주문에 실패했습니다");
+  }, session);
+  if (!res.ok) {
+    const err = await res.json().catch(() => null);
+    if (err?.code === "MENU_SOLD_OUT") throw new Error("품절된 메뉴가 포함되어 있습니다");
+    throw new Error(err?.message || "주문에 실패했습니다");
+  }
   return res.json();
 }
 
 export async function fetchOrders(
-  token: string,
-  sessionId: string,
+  session: TableSession,
   cursor: string | null
 ): Promise<CursorPage<Order>> {
   if (!API_BASE) {
     await new Promise((r) => setTimeout(r, 200));
-    const sessionOrders = MOCK_ORDERS.filter((o) => o.sessionId === sessionId);
-    const startIdx = cursor ? sessionOrders.findIndex((o) => o.id === cursor) + 1 : 0;
+    const sessionOrders = MOCK_ORDERS.filter((o) => o.sessionId === session.sessionId);
+    const startIdx = cursor ? sessionOrders.findIndex((o) => String(o.id) === cursor) + 1 : 0;
     const items = sessionOrders.slice(startIdx, startIdx + 10);
-    const nextCursor = startIdx + 10 < sessionOrders.length ? items[items.length - 1]?.id ?? null : null;
+    const nextCursor = startIdx + 10 < sessionOrders.length ? String(items[items.length - 1]?.id ?? "") : null;
     return { items, nextCursor };
   }
 
-  const params = new URLSearchParams({ sessionId, size: "10" });
+  const params = new URLSearchParams({ size: "10" });
   if (cursor) params.set("cursor", cursor);
 
-  const res = await fetch(`${API_BASE}/api/orders?${params}`, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
+  const res = await authFetch(
+    `${API_BASE}/api/tables/${session.tableId}/orders?${params}`,
+    {},
+    session
+  );
   if (!res.ok) throw new Error("주문 내역을 불러올 수 없습니다");
   return res.json();
 }

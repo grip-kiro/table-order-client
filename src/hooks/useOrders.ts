@@ -7,13 +7,12 @@ export function useOrders(session: TableSession) {
   const [cursor, setCursor] = useState<string | null>(null);
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(false);
-  const [orderError, setOrderError] = useState<string | null>(null);
 
   const loadOrders = useCallback(async () => {
     if (loading || !hasMore) return;
     setLoading(true);
     try {
-      const page = await fetchOrders(session.token, session.sessionId, cursor);
+      const page = await fetchOrders(session, cursor);
       setOrders((prev) => [...prev, ...page.items]);
       setCursor(page.nextCursor);
       setHasMore(page.nextCursor !== null);
@@ -27,7 +26,7 @@ export function useOrders(session: TableSession) {
   const refreshOrders = useCallback(async () => {
     setLoading(true);
     try {
-      const page = await fetchOrders(session.token, session.sessionId, null);
+      const page = await fetchOrders(session, null);
       setOrders(page.items);
       setCursor(page.nextCursor);
       setHasMore(page.nextCursor !== null);
@@ -40,13 +39,8 @@ export function useOrders(session: TableSession) {
 
   const placeOrder = useCallback(
     async (cart: CartItem[], total: number): Promise<Order> => {
-      setOrderError(null);
-      const order = await createOrder(session.token, {
-        storeId: session.storeId,
-        tableNo: session.tableNo,
-        sessionId: session.sessionId,
-        items: cart.map((i) => ({ menuId: i.id, name: i.name, qty: i.qty, price: i.price })),
-        total,
+      const order = await createOrder(session, {
+        items: cart.map((i) => ({ menuId: i.menuId, quantity: i.qty })),
       });
       setOrders((prev) => [order, ...prev]);
       return order;
@@ -54,5 +48,5 @@ export function useOrders(session: TableSession) {
     [session]
   );
 
-  return { orders, loading, hasMore, orderError, loadOrders, refreshOrders, placeOrder };
+  return { orders, loading, hasMore, loadOrders, refreshOrders, placeOrder };
 }

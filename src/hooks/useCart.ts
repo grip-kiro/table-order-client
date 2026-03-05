@@ -19,16 +19,17 @@ export function useCart() {
   }, [cart]);
 
   const add = useCallback((menu: Menu, qty: number = 1) => {
+    if (menu.isSoldOut) return;
     setCart((prev) => {
-      const exists = prev.find((i) => i.id === menu.id);
-      if (exists) return prev.map((i) => (i.id === menu.id ? { ...i, qty: i.qty + qty } : i));
-      return [...prev, { ...menu, qty }];
+      const exists = prev.find((i) => i.menuId === menu.id);
+      if (exists) return prev.map((i) => (i.menuId === menu.id ? { ...i, qty: i.qty + qty } : i));
+      return [...prev, { menuId: menu.id, name: menu.name, price: menu.price, imageUrl: menu.imageUrl, qty }];
     });
   }, []);
 
-  const updateQty = useCallback((id: number, delta: number) => {
+  const updateQty = useCallback((menuId: number, delta: number) => {
     setCart((prev) =>
-      prev.map((i) => (i.id === id ? { ...i, qty: i.qty + delta } : i)).filter((i) => i.qty > 0)
+      prev.map((i) => (i.menuId === menuId ? { ...i, qty: i.qty + delta } : i)).filter((i) => i.qty > 0)
     );
   }, []);
 

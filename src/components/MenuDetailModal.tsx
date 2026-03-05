@@ -20,20 +20,34 @@ export default function MenuDetailModal({ menu, onClose, onAdd }: Props) {
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-box" onClick={(e) => e.stopPropagation()}>
-        <div className="modal-emoji">{menu.img}</div>
-        <div className="modal-name">{menu.name}</div>
-        <div className="modal-desc">{menu.desc}</div>
-        <div className="modal-price">{fmt(menu.price * qty)}</div>
-        <span className="modal-category">{menu.category}</span>
-        <div className="modal-qty-row">
-          <button className="modal-qty-btn" onClick={() => setQty((q) => Math.max(1, q - 1))}>−</button>
-          <span className="modal-qty-num">{qty}</span>
-          <button className="modal-qty-btn" onClick={() => setQty((q) => q + 1)}>+</button>
+        <div className="modal-img-area">
+          {menu.imageUrl ? (
+            <img className="modal-img" src={menu.imageUrl} alt={menu.name} />
+          ) : (
+            <span className="modal-placeholder">🍽️</span>
+          )}
         </div>
+        <div className="modal-name">{menu.name}</div>
+        <div className="modal-desc">{menu.description}</div>
+        <div className="modal-price">{fmt(menu.price * qty)}</div>
+        {menu.categories.length > 0 && (
+          <span className="modal-category">{menu.categories[0].name}</span>
+        )}
+        {!menu.isSoldOut && (
+          <div className="modal-qty-row">
+            <button className="modal-qty-btn" onClick={() => setQty((q) => Math.max(1, q - 1))}>−</button>
+            <span className="modal-qty-num">{qty}</span>
+            <button className="modal-qty-btn" onClick={() => setQty((q) => q + 1)}>+</button>
+          </div>
+        )}
         <div className="modal-actions">
           <button className="modal-close-btn" onClick={onClose}>닫기</button>
-          <button className="modal-add-btn" onClick={() => { onAdd(menu, qty); onClose(); }}>
-            {qty}개 담기 · {fmt(menu.price * qty)}
+          <button
+            className="modal-add-btn"
+            disabled={menu.isSoldOut}
+            onClick={() => { onAdd(menu, qty); onClose(); }}
+          >
+            {menu.isSoldOut ? "품절" : `${qty}개 담기 · ${fmt(menu.price * qty)}`}
           </button>
         </div>
       </div>

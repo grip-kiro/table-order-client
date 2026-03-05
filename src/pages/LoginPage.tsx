@@ -12,11 +12,10 @@ interface Props {
 
 export default function LoginPage({ savedCredential, loading, error, onLogin, onAutoLogin }: Props) {
   const [storeId, setStoreId] = useState("");
-  const [tableNo, setTableNo] = useState("");
-  const [password, setPassword] = useState("");
+  const [tableNumber, setTableNumber] = useState("");
+  const [pin, setPin] = useState("");
   const [localError, setLocalError] = useState("");
 
-  // 저장된 인증 정보가 있으면 자동 로그인 시도
   useEffect(() => {
     if (savedCredential) {
       onAutoLogin();
@@ -28,25 +27,26 @@ export default function LoginPage({ savedCredential, loading, error, onLogin, on
     e.preventDefault();
     setLocalError("");
 
-    if (!storeId.trim()) {
-      setLocalError("매장 식별자를 입력해주세요");
+    const storeIdNum = Number(storeId);
+    if (!storeId.trim() || isNaN(storeIdNum) || storeIdNum <= 0) {
+      setLocalError("매장 ID를 입력해주세요");
       return;
     }
-    if (!tableNo.trim() || isNaN(Number(tableNo))) {
-      setLocalError("올바른 테이블 번호를 입력해주세요");
+    const tableNum = Number(tableNumber);
+    if (!tableNumber.trim() || isNaN(tableNum) || tableNum <= 0) {
+      setLocalError("테이블 번호를 입력해주세요");
       return;
     }
-    if (!password.trim()) {
-      setLocalError("비밀번호를 입력해주세요");
+    if (!/^\d{4,6}$/.test(pin)) {
+      setLocalError("PIN은 4~6자리 숫자입니다");
       return;
     }
 
-    onLogin({ storeId: storeId.trim(), tableNo: Number(tableNo), password: password.trim() });
+    onLogin({ storeId: storeIdNum, tableNumber: tableNum, pin });
   };
 
   const displayError = error || localError;
 
-  // 자동 로그인 진행 중
   if (savedCredential && loading) {
     return (
       <div className="login-page">
@@ -68,10 +68,10 @@ export default function LoginPage({ savedCredential, loading, error, onLogin, on
         <p className="login-subtitle">테이블 초기 설정</p>
 
         <form className="login-form" onSubmit={handleSubmit}>
-          <label className="login-label">매장 식별자</label>
+          <label className="login-label">매장 ID</label>
           <input
             className="login-input"
-            type="text"
+            type="number"
             placeholder="매장 ID를 입력하세요"
             value={storeId}
             onChange={(e) => setStoreId(e.target.value)}
@@ -84,19 +84,21 @@ export default function LoginPage({ savedCredential, loading, error, onLogin, on
             className="login-input"
             type="number"
             placeholder="테이블 번호"
-            value={tableNo}
-            onChange={(e) => setTableNo(e.target.value)}
+            value={tableNumber}
+            onChange={(e) => setTableNumber(e.target.value)}
             min="1"
             disabled={loading}
           />
 
-          <label className="login-label" style={{ marginTop: 16 }}>비밀번호</label>
+          <label className="login-label" style={{ marginTop: 16 }}>PIN</label>
           <input
             className="login-input"
             type="password"
-            placeholder="테이블 비밀번호"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            placeholder="4~6자리 숫자"
+            value={pin}
+            onChange={(e) => setPin(e.target.value.replace(/\D/g, "").slice(0, 6))}
+            inputMode="numeric"
+            maxLength={6}
             disabled={loading}
           />
 

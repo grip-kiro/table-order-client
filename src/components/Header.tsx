@@ -16,7 +16,7 @@ export default function Header({ session, cartCount, onLogout }: Props) {
         <span className="header-logo">🍽</span>
         <div>
           <div className="header-store">테이블 오더</div>
-          <div className="header-table">테이블 {session.tableNo}번</div>
+          <div className="header-table">테이블 {session.tableNumber}번</div>
         </div>
       </div>
       <nav className="header-nav">

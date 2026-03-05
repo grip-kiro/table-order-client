@@ -7,7 +7,7 @@ import "./CartPage.css";
 interface Props {
   cart: CartItem[];
   total: number;
-  onUpdateQty: (id: number, delta: number) => void;
+  onUpdateQty: (menuId: number, delta: number) => void;
   onClear: () => void;
   onOrder: () => void;
 }
@@ -31,16 +31,22 @@ export default function CartPage({ cart, total, onUpdateQty, onClear, onOrder }:
         <>
           <div className="cart-list">
             {cart.map((item) => (
-              <div key={item.id} className="cart-item">
-                <span className="cart-emoji">{item.img}</span>
+              <div key={item.menuId} className="cart-item">
+                <span className="cart-emoji">
+                  {item.imageUrl ? (
+                    <img src={item.imageUrl} alt={item.name} className="cart-img" />
+                  ) : (
+                    "🍽️"
+                  )}
+                </span>
                 <div className="cart-item-info">
                   <div className="cart-item-name">{item.name}</div>
                   <div className="cart-item-price">{fmt(item.price)}</div>
                 </div>
                 <div className="qty-row">
-                  <button className="qty-btn" onClick={() => onUpdateQty(item.id, -1)}>−</button>
+                  <button className="qty-btn" onClick={() => onUpdateQty(item.menuId, -1)}>−</button>
                   <span className="qty-num">{item.qty}</span>
-                  <button className="qty-btn" onClick={() => onUpdateQty(item.id, 1)}>+</button>
+                  <button className="qty-btn" onClick={() => onUpdateQty(item.menuId, 1)}>+</button>
                 </div>
                 <div className="cart-item-total">{fmt(item.price * item.qty)}</div>
               </div>

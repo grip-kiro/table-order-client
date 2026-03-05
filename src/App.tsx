@@ -10,13 +10,14 @@ import Toast from "./components/Toast";
 import { useSession } from "./hooks/useSession";
 import { useCart } from "./hooks/useCart";
 import { useOrders } from "./hooks/useOrders";
+import { Menu } from "./types";
 import "./App.css";
 
 function AppInner() {
   const navigate = useNavigate();
   const { session, savedCredential, loading: authLoading, error: authError, login, autoLogin, logout } = useSession();
   const { cart, add, updateQty, clear, total, count } = useCart();
-  const [successOrderId, setSuccessOrderId] = useState<string | null>(null);
+  const [successOrderId, setSuccessOrderId] = useState<number | null>(null);
 
   if (!session) {
     return (
@@ -47,7 +48,6 @@ function AppInner() {
   );
 }
 
-// 세션이 있을 때만 렌더링되는 컴포넌트 (useOrders를 안전하게 호출)
 function AuthenticatedApp({
   session,
   cart,
@@ -61,16 +61,15 @@ function AuthenticatedApp({
   navigate,
   logout,
 }: any) {
-  const { orders, loading: ordersLoading, hasMore, orderError, loadOrders, refreshOrders, placeOrder } = useOrders(session);
+  const { orders, loading: ordersLoading, hasMore, loadOrders, refreshOrders, placeOrder } = useOrders(session);
   const [toast, setToast] = useState<string | null>(null);
 
-  // 첫 로드 시 주문 내역 조회
   useEffect(() => {
     refreshOrders();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleAdd = useCallback((menu: any, qty: number = 1) => {
+  const handleAdd = useCallback((menu: Menu, qty: number = 1) => {
     add(menu, qty);
     setToast(`${menu.name} ${qty}개가 장바구니에 추가되었습니다`);
   }, [add]);

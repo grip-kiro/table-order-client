@@ -35,12 +35,11 @@ export function useSession() {
     setError("");
     try {
       const sess = await loginTable(credential);
-      // 인증 정보 로컬 저장 (자동 로그인용)
       localStorage.setItem(CRED_KEY, JSON.stringify(credential));
       sessionStorage.setItem(SESSION_KEY, JSON.stringify(sess));
       setSession(sess);
     } catch (e: any) {
-      setError(e.message || "로그인에 실패했습니다");
+      setError(e.message || "인증에 실패했습니다");
     } finally {
       setLoading(false);
     }
@@ -55,7 +54,6 @@ export function useSession() {
       sessionStorage.setItem(SESSION_KEY, JSON.stringify(sess));
       setSession(sess);
     } catch {
-      // 자동 로그인 실패 시 저장된 정보 삭제
       localStorage.removeItem(CRED_KEY);
     } finally {
       setLoading(false);

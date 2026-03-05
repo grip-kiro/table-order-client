@@ -1,19 +1,19 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import { Menu, CartItem } from "../types";
+import { Menu, CartItem, Category } from "../types";
 import { fetchMenus, fetchCategories } from "../api/client";
 import MenuCard from "../components/MenuCard";
 import MenuDetailModal from "../components/MenuDetailModal";
 import "./MenuPage.css";
 
 interface Props {
-  storeId: string;
+  storeId: number;
   cart: CartItem[];
-  onAdd: (menu: Menu, qty?: number) => void;
-  onUpdateQty: (id: number, delta: number) => void;
+  onAdd: (menu: Menu, qty: number) => void;
+  onUpdateQty: (menuId: number, delta: number) => void;
 }
 
 export default function MenuPage({ storeId, cart, onAdd, onUpdateQty }: Props) {
-  const [categories, setCategories] = useState<string[]>(["전체"]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [category, setCategory] = useState("전체");
   const [detailMenu, setDetailMenu] = useState<Menu | null>(null);
   const [menus, setMenus] = useState<Menu[]>([]);
@@ -22,7 +22,6 @@ export default function MenuPage({ storeId, cart, onAdd, onUpdateQty }: Props) {
   const [loading, setLoading] = useState(false);
   const loaderRef = useRef<HTMLDivElement | null>(null);
 
-  // 카테고리 로드
   useEffect(() => {
     fetchCategories(storeId).then(setCategories).catch(() => {});
   }, [storeId]);
@@ -42,21 +41,18 @@ export default function MenuPage({ storeId, cart, onAdd, onUpdateQty }: Props) {
     }
   }, [storeId, category, cursor, loading, hasMore]);
 
-  // 카테고리 변경 시 리셋
   useEffect(() => {
     setMenus([]);
     setCursor(null);
     setHasMore(true);
   }, [category]);
 
-  // 리셋 후 첫 페이지 로드
   useEffect(() => {
     if (menus.length === 0 && hasMore && !loading) {
       loadMore();
     }
   }, [menus.length, hasMore, loading, loadMore]);
 
-  // IntersectionObserver로 무한 스크롤
   useEffect(() => {
     const el = loaderRef.current;
     if (!el) return;
@@ -75,16 +71,18 @@ export default function MenuPage({ storeId, cart, onAdd, onUpdateQty }: Props) {
     setCategory(c);
   };
 
+  const allCategories = [{ id: 0, name: "전체", displayOrder: 0 }, ...categories];
+
   return (
     <div className="menu-page">
       <div className="category-bar">
-        {categories.map((c) => (
+        {allCategories.map((c) => (
           <button
-            key={c}
-            className={`cat-btn${category === c ? " active" : ""}`}
-            onClick={() => handleCategory(c)}
+            key={c.id}
+            className={`cat-btn${category === c.name ? " active" : ""}`}
+            onClick={() => handleCategory(c.name)}
           >
-            {c}
+            {c.name}
           </button>
         ))}
       </div>
@@ -94,7 +92,7 @@ export default function MenuPage({ storeId, cart, onAdd, onUpdateQty }: Props) {
           <MenuCard
             key={menu.id}
             menu={menu}
-            cartItem={cart.find((i) => i.id === menu.id)}
+            cartItem={cart.find((i) => i.menuId === menu.id)}
             onAdd={onAdd}
             onUpdateQty={onUpdateQty}
             onDetail={setDetailMenu}

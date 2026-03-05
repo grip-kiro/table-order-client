@@ -76,6 +76,18 @@
 .cart-emoji {
   font-size: 32px;
   flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cart-img {
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  object-fit: cover;
 }
 
 .cart-item-info {
@@ -101,8 +113,8 @@
 }
 
 .qty-btn {
-  width: 32px;
-  height: 32px;
+  width: 44px;
+  height: 44px;
   border-radius: 8px;
   border: 1px solid #e4dfd8;
   background: #fff;
