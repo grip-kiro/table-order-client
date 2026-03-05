@@ -13,7 +13,7 @@ export default function Header({ cartCount }: Props) {
       <div className="header-left">
         <span className="header-logo">🍽</span>
         <div>
-          <div className="header-store">그립 푸드</div>
+          <div className="header-store">테이블 오더</div>
           <div className="header-table">테이블 {MOCK_SESSION.tableNo}번</div>
         </div>
       </div>

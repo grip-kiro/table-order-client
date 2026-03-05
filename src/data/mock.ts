@@ -1,7 +1,7 @@
 import { Menu, Order, TableSession } from "../types";
 
 export const MOCK_SESSION: TableSession = {
-  storeId: "gripfood-01",
+  storeId: "tableorder-01",
   tableNo: 3,
   sessionId: "sess-abc123",
 };
@@ -23,6 +23,25 @@ export const MOCK_MENUS: Menu[] = [
   { id: 12, name: "아이스크림", price: 3000, category: "디저트", desc: "부드러운 바닐라 소프트아이스크림", img: "🍦" },
   { id: 13, name: "팥빙수", price: 7000, category: "디저트", desc: "달콤한 팥과 쫄깃한 떡이 가득", img: "🧊" },
 ];
+
+const PAGE_SIZE = 4;
+
+export interface CursorPage<T> {
+  items: T[];
+  nextCursor: number | null;
+}
+
+export function fetchMenus(category: string, cursor: number | null): Promise<CursorPage<Menu>> {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      const all = category === "전체" ? MOCK_MENUS : MOCK_MENUS.filter((m) => m.category === category);
+      const startIdx = cursor !== null ? all.findIndex((m) => m.id === cursor) + 1 : 0;
+      const items = all.slice(startIdx, startIdx + PAGE_SIZE);
+      const nextCursor = startIdx + PAGE_SIZE < all.length ? items[items.length - 1]?.id ?? null : null;
+      resolve({ items, nextCursor });
+    }, 300);
+  });
+}
 
 export const MOCK_ORDERS: Order[] = [
   {
