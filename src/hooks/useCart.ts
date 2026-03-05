@@ -18,11 +18,11 @@ export function useCart() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(cart));
   }, [cart]);
 
-  const add = useCallback((menu: Menu) => {
+  const add = useCallback((menu: Menu, qty: number = 1) => {
     setCart((prev) => {
       const exists = prev.find((i) => i.id === menu.id);
-      if (exists) return prev.map((i) => (i.id === menu.id ? { ...i, qty: i.qty + 1 } : i));
-      return [...prev, { ...menu, qty: 1 }];
+      if (exists) return prev.map((i) => (i.id === menu.id ? { ...i, qty: i.qty + qty } : i));
+      return [...prev, { ...menu, qty }];
     });
   }, []);
 

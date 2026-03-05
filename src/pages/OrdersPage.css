@@ -1,58 +1,59 @@
 .orders-page {
-  padding: 4px 0 80px;
+  padding: 0 0 80px;
+  animation: pageIn 0.3s ease;
 }
 
 .page-title {
   font-weight: 800;
-  font-size: 22px;
+  font-size: 20px;
   margin-bottom: 20px;
-  color: #1a1a1a;
-  letter-spacing: -0.3px;
+  color: #111;
+  letter-spacing: -0.5px;
 }
 
 .empty-state {
   text-align: center;
-  padding: 72px 20px;
-  color: #bbb;
+  padding: 80px 20px;
+  color: #ccc;
 }
 
 .empty-icon {
-  font-size: 56px;
-  margin-bottom: 4px;
+  font-size: 48px;
+  margin-bottom: 8px;
+  opacity: 0.6;
 }
 
 .empty-text {
   font-size: 15px;
   font-weight: 600;
+  color: #bbb;
 }
 
 .order-list {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 12px;
 }
 
 .order-card {
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(12px);
-  border-radius: 18px;
-  padding: 20px;
-  box-shadow:
-    0 1px 3px rgba(0, 0, 0, 0.04),
-    0 4px 16px rgba(0, 0, 0, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.5);
+  background: #fff;
+  border-radius: 14px;
+  padding: 20px 22px;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.04);
   transition: all 0.2s ease;
 }
 
 .order-card:hover {
-  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.04),
+    0 6px 24px rgba(0, 0, 0, 0.06);
 }
 
 .order-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 16px;
+  margin-bottom: 14px;
 }
 
 .order-meta {
@@ -64,40 +65,44 @@
 
 .order-no {
   font-weight: 800;
-  font-size: 15px;
-  color: #1a1a1a;
+  font-size: 14px;
+  color: #222;
+  font-variant-numeric: tabular-nums;
 }
 
 .order-time {
-  font-size: 12px;
+  font-size: 11px;
   color: #bbb;
 }
 
 .order-clock {
-  font-size: 12px;
+  font-size: 11px;
   color: #bbb;
+  font-variant-numeric: tabular-nums;
 }
 
 .status-badge {
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 700;
-  padding: 5px 14px;
-  border-radius: 8px;
+  padding: 5px 12px;
+  border-radius: 6px;
   flex-shrink: 0;
+  letter-spacing: 0.2px;
 }
 
 .order-items {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  margin-bottom: 16px;
+  gap: 6px;
+  margin-bottom: 14px;
+  padding-left: 2px;
 }
 
 .order-item-row {
   display: flex;
   gap: 8px;
-  font-size: 14px;
-  color: #555;
+  font-size: 13px;
+  color: #666;
   align-items: center;
 }
 
@@ -107,32 +112,35 @@
 
 .order-item-qty {
   color: #bbb;
+  font-variant-numeric: tabular-nums;
 }
 
 .order-item-amt {
   font-weight: 600;
   color: #444;
+  font-variant-numeric: tabular-nums;
 }
 
 .order-footer-row {
   display: flex;
   justify-content: space-between;
   padding-top: 14px;
-  border-top: 1px solid rgba(0, 0, 0, 0.05);
-  font-size: 14px;
+  border-top: 1px solid #f3f0eb;
+  font-size: 13px;
   font-weight: 600;
-  color: #777;
+  color: #999;
 }
 
 .order-total {
   font-weight: 800;
-  font-size: 17px;
-  color: #c2440e;
+  font-size: 16px;
+  color: #222;
+  letter-spacing: -0.3px;
 }
 
 .scroll-loader {
   text-align: center;
-  padding: 24px 0;
+  padding: 28px 0;
   min-height: 40px;
 }
 

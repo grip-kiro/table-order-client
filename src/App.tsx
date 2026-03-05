@@ -6,6 +6,7 @@ import MenuPage from "./pages/MenuPage";
 import CartPage from "./pages/CartPage";
 import OrdersPage from "./pages/OrdersPage";
 import OrderSuccessOverlay from "./components/OrderSuccessOverlay";
+import Toast from "./components/Toast";
 import { useSession } from "./hooks/useSession";
 import { useCart } from "./hooks/useCart";
 import { useOrders } from "./hooks/useOrders";
@@ -61,12 +62,18 @@ function AuthenticatedApp({
   logout,
 }: any) {
   const { orders, loading: ordersLoading, hasMore, orderError, loadOrders, refreshOrders, placeOrder } = useOrders(session);
+  const [toast, setToast] = useState<string | null>(null);
 
   // 첫 로드 시 주문 내역 조회
   useEffect(() => {
     refreshOrders();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const handleAdd = useCallback((menu: any, qty: number = 1) => {
+    add(menu, qty);
+    setToast(`${menu.name} ${qty}개가 장바구니에 추가되었습니다`);
+  }, [add]);
 
   const handleOrder = useCallback(async () => {
     if (cart.length === 0) return;
@@ -87,6 +94,7 @@ function AuthenticatedApp({
     <div className="app">
       <Header session={session} cartCount={count} onLogout={logout} />
       <OrderSuccessOverlay orderId={successOrderId} />
+      <Toast message={toast} onDone={() => setToast(null)} />
       <main className="main-content">
         <Routes>
           <Route
@@ -95,7 +103,7 @@ function AuthenticatedApp({
               <MenuPage
                 storeId={session.storeId}
                 cart={cart}
-                onAdd={add}
+                onAdd={handleAdd}
                 onUpdateQty={updateQty}
               />
             }

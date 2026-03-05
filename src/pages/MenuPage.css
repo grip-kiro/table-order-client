@@ -1,13 +1,14 @@
 .menu-page {
-  padding: 4px 0 80px;
+  padding: 0 0 80px;
+  animation: pageIn 0.3s ease;
 }
 
 .category-bar {
   display: flex;
-  gap: 8px;
+  gap: 6px;
   overflow-x: auto;
-  padding-bottom: 16px;
-  margin-bottom: 20px;
+  padding-bottom: 20px;
+  margin-bottom: 4px;
   scrollbar-width: none;
 }
 
@@ -16,40 +17,38 @@
 }
 
 .cat-btn {
-  padding: 10px 20px;
-  border-radius: 12px;
-  border: none;
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(8px);
+  padding: 9px 18px;
+  border-radius: 999px;
+  border: 1px solid #e4dfd8;
+  background: #fff;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
   white-space: nowrap;
-  color: #777;
+  color: #888;
   transition: all 0.2s ease;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
 }
 
 .cat-btn:hover {
-  background: rgba(255, 255, 255, 0.95);
-  color: #c2440e;
+  border-color: #ccc;
+  color: #555;
 }
 
 .cat-btn.active {
-  background: #c2440e;
+  background: #222;
+  border-color: #222;
   color: #fff;
-  box-shadow: 0 3px 12px rgba(194, 68, 14, 0.3);
 }
 
 .menu-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 14px;
 }
 
 .scroll-loader {
   text-align: center;
-  padding: 24px 0;
+  padding: 28px 0;
   min-height: 40px;
 }
 

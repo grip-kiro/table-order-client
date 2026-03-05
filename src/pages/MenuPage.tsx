@@ -8,7 +8,7 @@ import "./MenuPage.css";
 interface Props {
   storeId: string;
   cart: CartItem[];
-  onAdd: (menu: Menu) => void;
+  onAdd: (menu: Menu, qty?: number) => void;
   onUpdateQty: (id: number, delta: number) => void;
 }
 

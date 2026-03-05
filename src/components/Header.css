@@ -2,11 +2,12 @@
   position: sticky;
   top: 0;
   z-index: 100;
-  background: rgba(255, 255, 255, 0.82);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-  padding: 14px 24px;
+  background: rgba(246, 243, 238, 0.85);
+  backdrop-filter: blur(24px) saturate(1.4);
+  -webkit-backdrop-filter: blur(24px) saturate(1.4);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  padding: 0 28px;
+  height: 64px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -19,82 +20,87 @@
 }
 
 .header-logo {
-  font-size: 28px;
-  width: 44px;
-  height: 44px;
+  font-size: 24px;
+  width: 42px;
+  height: 42px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #fff5ef 0%, #ffe8db 100%);
+  background: #fff;
   border-radius: 12px;
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.06),
+    0 0 0 1px rgba(0, 0, 0, 0.04);
 }
 
 .header-store {
   font-weight: 800;
-  font-size: 17px;
-  color: #c2440e;
-  letter-spacing: -0.3px;
+  font-size: 16px;
+  color: #222;
+  letter-spacing: -0.5px;
 }
 
 .header-table {
-  font-size: 12px;
+  font-size: 11px;
   color: #999;
   font-weight: 500;
-  margin-top: 1px;
+  margin-top: 2px;
+  letter-spacing: 0.2px;
 }
 
 .header-nav {
   display: flex;
-  gap: 6px;
+  gap: 4px;
 }
 
 .nav-btn {
   position: relative;
-  padding: 8px 16px;
-  border-radius: 10px;
-  border: 1.5px solid transparent;
-  background: rgba(0, 0, 0, 0.04);
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
   cursor: pointer;
   font-size: 13px;
   font-weight: 600;
-  color: #777;
+  color: #888;
   text-decoration: none;
-  transition: all 0.2s ease;
+  transition: all 0.15s ease;
 }
 
 .nav-btn:hover {
-  background: rgba(194, 68, 14, 0.08);
-  color: #c2440e;
+  background: rgba(0, 0, 0, 0.04);
+  color: #555;
 }
 
 .nav-btn.active {
-  background: #c2440e;
+  background: #222;
   color: #fff;
-  box-shadow: 0 2px 8px rgba(194, 68, 14, 0.3);
 }
 
 .cart-badge {
   position: absolute;
-  top: -5px;
-  right: -5px;
-  background: #ef4444;
+  top: -4px;
+  right: -4px;
+  background: #c2440e;
   color: #fff;
   border-radius: 999px;
-  width: 18px;
+  min-width: 18px;
   height: 18px;
+  padding: 0 5px;
   font-size: 10px;
   font-weight: 700;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 6px rgba(239, 68, 68, 0.4);
+  border: 2px solid #f6f3ee;
 }
 
 .logout-btn {
-  color: #aaa;
+  color: #bbb;
+  font-size: 12px;
 }
 
 .logout-btn:hover {
-  background: rgba(0, 0, 0, 0.06);
-  color: #666;
+  background: rgba(0, 0, 0, 0.04);
+  color: #888;
 }
