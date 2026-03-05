@@ -14,26 +14,25 @@
 .category-bar::-webkit-scrollbar { display: none; }
 
 .cat-btn {
-  padding: 8px 18px;
+  padding: 8px 16px;
   border-radius: 999px;
-  border: 1.5px solid #e7e5e4;
+  border: none;
   background: #fff;
   cursor: pointer;
   font-size: 13px;
   font-weight: 600;
   white-space: nowrap;
-  color: #78716c;
+  color: #8b95a1;
   transition: all 0.2s ease;
 }
 
 .cat-btn:hover {
-  border-color: #a8a29e;
-  color: #44403c;
+  color: #4e5968;
+  background: #f2f4f6;
 }
 
 .cat-btn.active {
-  background: #1c1917;
-  border-color: #1c1917;
+  background: #3182f6;
   color: #fff;
 }
 
@@ -50,7 +49,7 @@
 }
 
 .loader-dot {
-  color: #d6d3d1;
+  color: #b0b8c1;
   font-size: 13px;
   font-weight: 500;
 }

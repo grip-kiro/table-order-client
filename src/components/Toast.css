@@ -3,14 +3,14 @@
   bottom: 28px;
   left: 50%;
   transform: translateX(-50%);
-  background: #1c1917;
+  background: #191f28;
   color: #fff;
   padding: 12px 20px;
   border-radius: 12px;
   font-size: 13px;
   font-weight: 600;
   z-index: 800;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.16);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
   animation: toastIn 0.3s cubic-bezier(0.16, 1, 0.3, 1), toastOut 0.25s ease 1.5s forwards;
   pointer-events: none;
   max-width: 320px;

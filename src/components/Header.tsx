@@ -1,5 +1,5 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { TableSession } from "../types";
 import "./Header.css";
 
@@ -10,9 +10,11 @@ interface Props {
 }
 
 export default function Header({ session, cartCount, onLogout }: Props) {
+  const navigate = useNavigate();
+
   return (
     <header className="header">
-      <div className="header-left">
+      <div className="header-left" onClick={() => navigate("/")} style={{ cursor: "pointer" }}>
         <span className="header-logo">🍽</span>
         <div>
           <div className="header-store">테이블 오더</div>
