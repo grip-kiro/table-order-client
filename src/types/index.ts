@@ -23,13 +23,27 @@ export interface Order {
   id: string;
   createdAt: Date;
   sessionId: string;
+  storeId: string;
+  tableNo: number;
   items: OrderItem[];
   total: number;
   status: OrderStatus;
+}
+
+export interface TableCredential {
+  storeId: string;
+  tableNo: number;
+  password: string;
 }
 
 export interface TableSession {
   storeId: string;
   tableNo: number;
   sessionId: string;
+  token: string;
+}
+
+export interface CursorPage<T> {
+  items: T[];
+  nextCursor: string | null;
 }

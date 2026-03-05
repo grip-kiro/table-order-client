@@ -129,3 +129,15 @@
   font-size: 17px;
   color: #c2440e;
 }
+
+.scroll-loader {
+  text-align: center;
+  padding: 24px 0;
+  min-height: 40px;
+}
+
+.loader-dot {
+  color: #bbb;
+  font-size: 13px;
+  font-weight: 500;
+}

@@ -1,17 +1,19 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { Menu, CartItem } from "../types";
-import { CATEGORIES, fetchMenus } from "../data/mock";
+import { fetchMenus, fetchCategories } from "../api/client";
 import MenuCard from "../components/MenuCard";
 import MenuDetailModal from "../components/MenuDetailModal";
 import "./MenuPage.css";
 
 interface Props {
+  storeId: string;
   cart: CartItem[];
   onAdd: (menu: Menu) => void;
   onUpdateQty: (id: number, delta: number) => void;
 }
 
-export default function MenuPage({ cart, onAdd, onUpdateQty }: Props) {
+export default function MenuPage({ storeId, cart, onAdd, onUpdateQty }: Props) {
+  const [categories, setCategories] = useState<string[]>(["전체"]);
   const [category, setCategory] = useState("전체");
   const [detailMenu, setDetailMenu] = useState<Menu | null>(null);
   const [menus, setMenus] = useState<Menu[]>([]);
@@ -20,15 +22,25 @@ export default function MenuPage({ cart, onAdd, onUpdateQty }: Props) {
   const [loading, setLoading] = useState(false);
   const loaderRef = useRef<HTMLDivElement | null>(null);
 
+  // 카테고리 로드
+  useEffect(() => {
+    fetchCategories(storeId).then(setCategories).catch(() => {});
+  }, [storeId]);
+
   const loadMore = useCallback(async () => {
     if (loading || !hasMore) return;
     setLoading(true);
-    const page = await fetchMenus(category, cursor);
-    setMenus((prev) => [...prev, ...page.items]);
-    setCursor(page.nextCursor);
-    setHasMore(page.nextCursor !== null);
-    setLoading(false);
-  }, [category, cursor, loading, hasMore]);
+    try {
+      const page = await fetchMenus(storeId, category, cursor);
+      setMenus((prev) => [...prev, ...page.items]);
+      setCursor(page.nextCursor !== null ? Number(page.nextCursor) : null);
+      setHasMore(page.nextCursor !== null);
+    } catch {
+      setHasMore(false);
+    } finally {
+      setLoading(false);
+    }
+  }, [storeId, category, cursor, loading, hasMore]);
 
   // 카테고리 변경 시 리셋
   useEffect(() => {
@@ -66,7 +78,7 @@ export default function MenuPage({ cart, onAdd, onUpdateQty }: Props) {
   return (
     <div className="menu-page">
       <div className="category-bar">
-        {CATEGORIES.map((c) => (
+        {categories.map((c) => (
           <button
             key={c}
             className={`cat-btn${category === c ? " active" : ""}`}

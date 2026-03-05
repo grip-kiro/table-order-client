@@ -1,12 +1,4 @@
-import { Menu, Order, TableSession } from "../types";
-
-export const MOCK_SESSION: TableSession = {
-  storeId: "tableorder-01",
-  tableNo: 3,
-  sessionId: "sess-abc123",
-};
-
-export const CATEGORIES = ["전체", "메인", "사이드", "음료", "디저트"];
+import { Menu, Order } from "../types";
 
 export const MOCK_MENUS: Menu[] = [
   { id: 1, name: "김치찌개", price: 9000, category: "메인", desc: "깊고 얼큰한 국물의 돼지고기 김치찌개", img: "🍲" },
@@ -24,46 +16,4 @@ export const MOCK_MENUS: Menu[] = [
   { id: 13, name: "팥빙수", price: 7000, category: "디저트", desc: "달콤한 팥과 쫄깃한 떡이 가득", img: "🧊" },
 ];
 
-const PAGE_SIZE = 4;
-
-export interface CursorPage<T> {
-  items: T[];
-  nextCursor: number | null;
-}
-
-export function fetchMenus(category: string, cursor: number | null): Promise<CursorPage<Menu>> {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      const all = category === "전체" ? MOCK_MENUS : MOCK_MENUS.filter((m) => m.category === category);
-      const startIdx = cursor !== null ? all.findIndex((m) => m.id === cursor) + 1 : 0;
-      const items = all.slice(startIdx, startIdx + PAGE_SIZE);
-      const nextCursor = startIdx + PAGE_SIZE < all.length ? items[items.length - 1]?.id ?? null : null;
-      resolve({ items, nextCursor });
-    }, 300);
-  });
-}
-
-export const MOCK_ORDERS: Order[] = [
-  {
-    id: "ORD-001",
-    createdAt: new Date(Date.now() - 25 * 60000),
-    sessionId: "sess-abc123",
-    items: [
-      { name: "김치찌개", qty: 2, price: 9000 },
-      { name: "콜라", qty: 2, price: 2000 },
-    ],
-    total: 22000,
-    status: "완료",
-  },
-  {
-    id: "ORD-002",
-    createdAt: new Date(Date.now() - 10 * 60000),
-    sessionId: "sess-abc123",
-    items: [
-      { name: "감자튀김", qty: 1, price: 5000 },
-      { name: "계란말이", qty: 1, price: 6000 },
-    ],
-    total: 11000,
-    status: "준비중",
-  },
-];
+export const MOCK_ORDERS: Order[] = [];
