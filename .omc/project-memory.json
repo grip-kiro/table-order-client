@@ -1,0 +1,244 @@
+{
+  "version": "1.0.0",
+  "lastScanned": 1772695219214,
+  "projectRoot": "/Users/grip_0283/Desktop/aws-project/table-order-client",
+  "techStack": {
+    "languages": [
+      {
+        "name": "JavaScript/TypeScript",
+        "version": null,
+        "confidence": "high",
+        "markers": [
+          "package.json"
+        ]
+      },
+      {
+        "name": "TypeScript",
+        "version": null,
+        "confidence": "high",
+        "markers": [
+          "tsconfig.json"
+        ]
+      }
+    ],
+    "frameworks": [
+      {
+        "name": "react",
+        "version": "19.2.4",
+        "category": "frontend"
+      },
+      {
+        "name": "react-dom",
+        "version": "19.2.4",
+        "category": "frontend"
+      }
+    ],
+    "packageManager": "npm",
+    "runtime": null
+  },
+  "build": {
+    "buildCommand": "npm run build",
+    "testCommand": "npm test",
+    "lintCommand": null,
+    "devCommand": "npm run start",
+    "scripts": {
+      "start": "react-scripts start",
+      "build": "react-scripts build",
+      "test": "react-scripts test",
+      "eject": "react-scripts eject"
+    }
+  },
+  "conventions": {
+    "namingStyle": null,
+    "importStyle": null,
+    "testPattern": null,
+    "fileOrganization": "type-based"
+  },
+  "structure": {
+    "isMonorepo": false,
+    "workspaces": [],
+    "mainDirectories": [
+      "public",
+      "src"
+    ],
+    "gitBranches": {
+      "defaultBranch": "main",
+      "branchingStrategy": null
+    }
+  },
+  "customNotes": [],
+  "directoryMap": {
+    "public": {
+      "path": "public",
+      "purpose": "Public files",
+      "fileCount": 7,
+      "lastAccessed": 1772695219201,
+      "keyFiles": [
+        "favicon.ico",
+        "favicon.svg",
+        "index.html",
+        "logo192.png",
+        "logo512.png"
+      ]
+    },
+    "src": {
+      "path": "src",
+      "purpose": "Source code",
+      "fileCount": 10,
+      "lastAccessed": 1772695219201,
+      "keyFiles": [
+        "App.css",
+        "App.test.tsx",
+        "App.tsx",
+        "index.css",
+        "index.tsx"
+      ]
+    },
+    "src/api": {
+      "path": "src/api",
+      "purpose": "API routes",
+      "fileCount": 1,
+      "lastAccessed": 1772695219206,
+      "keyFiles": [
+        "client.ts"
+      ]
+    },
+    "src/components": {
+      "path": "src/components",
+      "purpose": "UI components",
+      "fileCount": 10,
+      "lastAccessed": 1772695219206,
+      "keyFiles": [
+        "Header.css",
+        "Header.tsx",
+        "MenuCard.css"
+      ]
+    },
+    "src/data": {
+      "path": "src/data",
+      "purpose": "Data files",
+      "fileCount": 1,
+      "lastAccessed": 1772695219206,
+      "keyFiles": [
+        "mock.ts"
+      ]
+    }
+  },
+  "hotPaths": [
+    {
+      "path": "src/api/client.ts",
+      "accessCount": 2,
+      "lastAccessed": 1772695333960,
+      "type": "file"
+    },
+    {
+      "path": "src/types/index.ts",
+      "accessCount": 2,
+      "lastAccessed": 1772695334335,
+      "type": "file"
+    },
+    {
+      "path": "package.json",
+      "accessCount": 1,
+      "lastAccessed": 1772695256401,
+      "type": "file"
+    },
+    {
+      "path": "src/App.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1772695261172,
+      "type": "file"
+    },
+    {
+      "path": "src/hooks/useOrders.ts",
+      "accessCount": 1,
+      "lastAccessed": 1772695261388,
+      "type": "file"
+    },
+    {
+      "path": "src/hooks/useSession.ts",
+      "accessCount": 1,
+      "lastAccessed": 1772695261631,
+      "type": "file"
+    },
+    {
+      "path": "src/hooks/useCart.ts",
+      "accessCount": 1,
+      "lastAccessed": 1772695261667,
+      "type": "file"
+    },
+    {
+      "path": "src/pages/LoginPage.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1772695263900,
+      "type": "file"
+    },
+    {
+      "path": "src/pages/MenuPage.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1772695263912,
+      "type": "file"
+    },
+    {
+      "path": "src/pages/CartPage.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1772695264092,
+      "type": "file"
+    },
+    {
+      "path": "src/pages/OrdersPage.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1772695264295,
+      "type": "file"
+    },
+    {
+      "path": "src/data/mock.ts",
+      "accessCount": 1,
+      "lastAccessed": 1772695265000,
+      "type": "file"
+    },
+    {
+      "path": "tsconfig.json",
+      "accessCount": 1,
+      "lastAccessed": 1772695267163,
+      "type": "file"
+    },
+    {
+      "path": "src/utils.ts",
+      "accessCount": 1,
+      "lastAccessed": 1772695267471,
+      "type": "file"
+    },
+    {
+      "path": "src/index.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1772695267559,
+      "type": "file"
+    },
+    {
+      "path": "src/components/Header.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1772695269733,
+      "type": "file"
+    },
+    {
+      "path": "src/components/MenuCard.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1772695269919,
+      "type": "file"
+    },
+    {
+      "path": "src/components/MenuDetailModal.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1772695270161,
+      "type": "file"
+    },
+    {
+      "path": "",
+      "accessCount": 1,
+      "lastAccessed": 1772695335172,
+      "type": "directory"
+    }
+  ],
+  "userDirectives": []
+}

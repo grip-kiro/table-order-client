@@ -10,6 +10,7 @@ import Toast from "./components/Toast";
 import { useSession } from "./hooks/useSession";
 import { useCart } from "./hooks/useCart";
 import { useOrders } from "./hooks/useOrders";
+import { setSessionExpiredHandler } from "./api/client";
 import { Menu } from "./types";
 import "./App.css";
 
@@ -17,6 +18,14 @@ function AppInner() {
   const navigate = useNavigate();
   const { session, savedCredential, loading: authLoading, error: authError, login, autoLogin, logout } = useSession();
   const { cart, add, updateQty, clear, total, count } = useCart();
+
+  // 세션 만료 시 자동 로그아웃
+  useEffect(() => {
+    setSessionExpiredHandler(() => {
+      logout();
+      navigate("/");
+    });
+  }, [logout, navigate]);
   const [successOrderId, setSuccessOrderId] = useState<number | null>(null);
 
   if (!session) {
